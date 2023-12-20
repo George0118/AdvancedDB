@@ -1,0 +1,19 @@
++------------------------------+-----+
+|Descent_Code                  |count|
++------------------------------+-----+
+|Hispanic/Latin/Mexican        |10070|
+|White                         |4962 |
+|Black                         |3766 |
+|Other                         |2155 |
+|Unknown                       |556  |
+|Other Asian                   |455  |
+|Korean                        |54   |
+|Chinese                       |13   |
+|American Indian/Alaskan Native|6    |
+|Filipino                      |5    |
+|Japanese                      |2    |
+|Cambodian                     |2    |
+|Pacific Islander              |1    |
+|Vietnamese                    |1    |
++------------------------------+-----+
+
