@@ -3,3 +3,6 @@
 
 # Ignore the passwords.txt file
 passwords.txt
+
+# Ignore the .gitignore file
+.gitignore

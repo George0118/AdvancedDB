@@ -1,4 +1,4 @@
-### Code - DataFrame API
+### Query 1 - DataFrame Implementation
 
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructField, StructType, IntegerType, FloatType, StringType
@@ -24,8 +24,6 @@ crimes_df = crimes_df1.union(crimes_df2)
 
 ##################################################
 
-
-
 # Convert the "Date Rptd" column to a timestamp type
 crimes_df = crimes_df.withColumn("Timestamp", to_date(col("Date Rptd"), "MM/dd/yyyy hh:mm:ss a"))
 
@@ -35,8 +33,8 @@ crimes_df = crimes_df.withColumn("Month", month(col("Timestamp")))
 crimes_df = crimes_df.drop("Date Rptd")
 crimes_df = crimes_df.drop("Timestamp")
 
+# Count Crimes by Year and Month
 count_result = crimes_df.groupBy("Year", "Month").count()
-
 
 # Create a window specification to rank months within each year based on counts
 window_spec = Window.partitionBy("Year").orderBy(col("count").desc())
@@ -44,8 +42,7 @@ window_spec = Window.partitionBy("Year").orderBy(col("count").desc())
 # Add a new column "MonthRank" to show the rank of each month within the year
 count_result = count_result.withColumn("MonthRank", rank().over(window_spec))
 
+# Filter only the top 3 from each year
 top3_per_year = count_result.filter(col("MonthRank") <= 3)
-
-
 
 top3_per_year.show()

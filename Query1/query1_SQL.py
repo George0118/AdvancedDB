@@ -1,3 +1,5 @@
+### Query 1 - SQL Implementation
+
 from pyspark.sql import SparkSession
 
 spark = SparkSession \

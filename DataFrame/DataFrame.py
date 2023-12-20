@@ -1,4 +1,4 @@
-### Code - DataFrame API
+### DataFrame API
 
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructField, StructType, IntegerType, FloatType, StringType
