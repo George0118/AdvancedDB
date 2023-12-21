@@ -45,4 +45,5 @@ count_result = count_result.withColumn("MonthRank", rank().over(window_spec))
 # Filter only the top 3 from each year
 top3_per_year = count_result.filter(col("MonthRank") <= 3)
 
-top3_per_year.show()
+# Show the results
+top3_per_year.show(50)
