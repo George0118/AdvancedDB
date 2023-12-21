@@ -1,8 +1,9 @@
 # Ignore all .csv files
 *.csv
 
-# Ignore the passwords.txt file
+# Ignore files
 passwords.txt
+timed*
 
 # Ignore the .gitignore file
 .gitignore

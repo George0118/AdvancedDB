@@ -11,7 +11,7 @@ spark = SparkSession \
     .appName("Query 2 DF/SQL") \
     .getOrCreate()
 
-columns_to_select = ["DR_NO","Time OCC"]
+columns_to_select = ["DR_NO","Time OCC", "Premis Desc"]
 
 # Read data from the first file / first node
 crimes_df1 = spark.read.csv("/user/user/data/Crime_Data_from_2010_to_2019.csv", header=True).select(columns_to_select)
@@ -22,7 +22,10 @@ crimes_df2 = spark.read.csv("/user/user/data/Crime_Data_from_2020_to_Present.csv
 # Union the two DataFrames
 crimes_df = crimes_df1.union(crimes_df2)
 
-##################################################
+# Filter the DataFrame to keep only rows where "Premis Desc" is equal to "STREET"
+crimes_df = crimes_df.filter(crimes_df["Premis Desc"] == "STREET")
+
+crimes_df = crimes_df.drop("Premis Desc")
 
 # Remove rows with any null values if any
 crimes_df = crimes_df.na.drop()

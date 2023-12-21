@@ -18,7 +18,7 @@ def get_time_period(time):
 # Create a Spark session
 spark = SparkSession.builder.appName("Query 2 RDD").getOrCreate()
 
-columns_to_select = ["DR_NO","Time OCC"]
+columns_to_select = ["DR_NO","Time OCC", "Premis Desc"]
 
 # Read data from the first file / first node
 crimes_rdd1 = spark.read.csv("/user/user/data/Crime_Data_from_2010_to_2019.csv", header=True).select(columns_to_select).rdd
@@ -28,11 +28,14 @@ crimes_rdd2 = spark.read.csv("/user/user/data/Crime_Data_from_2020_to_Present.cs
 # Union the two RDDs
 crimes_rdd = crimes_rdd1.union(crimes_rdd2)
 
+# Filter the RDD to keep only tuples where "Premis Desc" is equal to "STREET"
+crimes_rdd = crimes_rdd.filter(lambda row: row["Premis Desc"] == "STREET")
+
 # Remove rows with any null values if any
 crimes_rdd = crimes_rdd.filter(lambda row: row[1] is not None)
 
 # Cast the "Time OCC" column to integers
-crimes_rdd = crimes_rdd.map(lambda row: (row[0], int(row[1])))  # Convert the second element to int
+crimes_rdd = crimes_rdd.map(lambda row: (row[0], int(row[1])))
 
 # Define the conditions for each time period
 def map_to_time_period(row):

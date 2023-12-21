@@ -2,9 +2,9 @@ The Time Periods with the most crimes in Descending order are:
 +-----------+------+
 |Time_Period|count |
 +-----------+------+
-|Night      |832607|
-|Afternoon  |815066|
-|Evening    |685506|
-|Morning    |660254|
+|Night      |237605|
+|Evening    |187306|
+|Afternoon  |148180|
+|Morning    |123846|
 +-----------+------+
 
