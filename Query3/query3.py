@@ -31,10 +31,11 @@ crimes_df1 = crimes_df1.withColumn("Year", year("Timestamp"))
 
 
 
-
-
 crimes_df1_2015 = crimes_df1.filter(crimes_df1["Year"] == 2015)
 
+
+# Victimless crimes exist: Φιλτράρετε εκτός του συνόλου εργασίας σας τα data points για τα οποία
+# δεν υπάρχει καταγραφή θύματος ή της καταγωγής του.
 crimes_df1_2015 = crimes_df1_2015.filter(col("Vict Descent").isNotNull())
 # count = crimes_df1_2015.count()
 # print("Number of rows in crimes_df1_2015:", count)
@@ -84,7 +85,10 @@ count2 = merged_data.count()
 # Register the merged_data DataFrame as a temporary SQL table
 merged_data.createOrReplaceTempView("merged_data_table")
 
-# Write a SQL query with Descent Code mapping to get the count of rows for each Victim Descent
+
+
+# Μπορείτε, αν θέλετε, να χρησιμοποιήσετε την αντιστοίχιση των κωδικών καταγωγής με την
+# περιγραφή που αναφέρονται στις πληροφορίες που συνοδεύουν το σύνολο δεδομένων.
 victim_descent_counts_sql = """
     SELECT 
         CASE 
