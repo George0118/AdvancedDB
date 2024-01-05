@@ -1,0 +1,47 @@
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Project [DR_NO#17, LAT#224, LON#226, DIVISION#198, X#195, Y#196]
+   +- CartesianProduct (AREA#212 = cast(PREC#200 as int))
+      :- Filter isnotnull(AREA#212)
+      :  +- SortAggregate(key=[DR_NO#17], functions=[first(LAT#43, false), first(LON#44, false), first(AREA#79, false)])
+      :     +- Sort [DR_NO#17 ASC NULLS FIRST], false, 0
+      :        +- Exchange hashpartitioning(DR_NO#17, 200), ENSURE_REQUIREMENTS, [plan_id=115]
+      :           +- SortAggregate(key=[DR_NO#17], functions=[partial_first(LAT#43, false), partial_first(LON#44, false), partial_first(AREA#79, false)])
+      :              +- Sort [DR_NO#17 ASC NULLS FIRST], false, 0
+      :                 +- Union
+      :                    :- Project [DR_NO#17, LAT#43, LON#44, AREA #21 AS AREA#79]
+      :                    :  +- Filter (atleastnnonnulls(5, DR_NO#17, Weapon Used Cd#33, LAT#43, LON#44, AREA #21) AND (NOT (LAT#43 = 0) OR NOT (LON#44 = 0)))
+      :                    :     +- FileScan csv [DR_NO#17,AREA #21,Weapon Used Cd#33,LAT#43,LON#44] Batched: false, DataFilters: [atleastnnonnulls(5, DR_NO#17, Weapon Used Cd#33, LAT#43, LON#44, AREA #21), (NOT (LAT#43 = 0) OR..., Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://okeanos-master:54310/user/user/data/Crime_Data_from_2010_to_201..., PartitionFilters: [], PushedFilters: [Or(Not(EqualTo(LAT,0)),Not(EqualTo(LON,0)))], ReadSchema: struct<DR_NO:string,AREA :string,Weapon Used Cd:string,LAT:string,LON:string>
+      :                    +- Project [DR_NO#102, LAT#128, LON#129, AREA#106]
+      :                       +- Filter (atleastnnonnulls(5, DR_NO#102, Weapon Used Cd#118, LAT#128, LON#129, AREA#106) AND (NOT (LAT#128 = 0) OR NOT (LON#129 = 0)))
+      :                          +- FileScan csv [DR_NO#102,AREA#106,Weapon Used Cd#118,LAT#128,LON#129] Batched: false, DataFilters: [atleastnnonnulls(5, DR_NO#102, Weapon Used Cd#118, LAT#128, LON#129, AREA#106), (NOT (LAT#128 = ..., Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://okeanos-master:54310/user/user/data/Crime_Data_from_2020_to_Pre..., PartitionFilters: [], PushedFilters: [Or(Not(EqualTo(LAT,0)),Not(EqualTo(LON,0)))], ReadSchema: struct<DR_NO:string,AREA:string,Weapon Used Cd:string,LAT:string,LON:string>
+      +- Filter isnotnull(PREC#200)
+         +- FileScan csv [X#195,Y#196,DIVISION#198,PREC#200] Batched: false, DataFilters: [isnotnull(PREC#200)], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://okeanos-master:54310/user/user/data/LAPD_Police_Stations.csv], PartitionFilters: [], PushedFilters: [IsNotNull(PREC)], ReadSchema: struct<X:string,Y:string,DIVISION:string,PREC:string>
+
+
++----------------+-----------+------------------+
+|        DIVISION|Crime_Count|  Average_Distance|
++----------------+-----------+------------------+
+|     77TH STREET|      94513|2.6459920248986046|
+|       SOUTHEAST|      72851|2.0924554655450325|
+|       SOUTHWEST|      72499|2.6101377491223867|
+|         CENTRAL|      63298|1.0075404877485477|
+|          NEWTON|      61188| 2.052861982390624|
+|         RAMPART|      55620|1.5314623257158682|
+|       HOLLYWOOD|      50914| 1.434434725301641|
+|         OLYMPIC|      48913|1.7571509029566443|
+|         PACIFIC|      42764| 3.877366027355469|
+|      HOLLENBECK|      41391| 2.592438217853799|
+|         MISSION|      40874| 4.702329561720124|
+|          HARBOR|      40659| 3.934581926551123|
+| NORTH HOLLYWOOD|      39895|2.5462964186732715|
+|        WILSHIRE|      37739|2.4014819324456433|
+|       NORTHEAST|      37122|3.9935717368796992|
+|        VAN NUYS|      36075|2.1345970397840666|
+|        FOOTHILL|      34532| 4.237881767568377|
+|     WEST VALLEY|      33709|  3.38685650050374|
+|         TOPANGA|      32377|3.5087516637578315|
+|      DEVONSHIRE|      30249|  3.98107341150762|
+|WEST LOS ANGELES|      26904|  3.65732264984676|
++----------------+-----------+------------------+
+

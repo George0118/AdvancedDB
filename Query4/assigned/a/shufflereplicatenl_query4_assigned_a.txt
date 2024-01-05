@@ -1,0 +1,41 @@
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Project [DR_NO#17, Year#223, LAT#252, LON#254, X#196, Y#197]
+   +- CartesianProduct (AREA#235 = cast(PREC#201 as int))
+      :- Project [DR_NO#17, LAT#252, LON#254, cast(AREA#256 as int) AS AREA#235, year(cast(gettimestamp(Date Rptd#248, MM/dd/yyyy hh:mm:ss a, TimestampType, Some(Europe/Athens), false) as date)) AS Year#223]
+      :  +- Filter (Weapon Used Cd#250 INSET 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199 AND isnotnull(cast(AREA#256 as int)))
+      :     +- SortAggregate(key=[DR_NO#17], functions=[first(Date Rptd#18, false), first(Weapon Used Cd#33, false), first(LAT#43, false), first(LON#44, false), first(AREA#80, false)])
+      :        +- Sort [DR_NO#17 ASC NULLS FIRST], false, 0
+      :           +- Exchange hashpartitioning(DR_NO#17, 200), ENSURE_REQUIREMENTS, [plan_id=119]
+      :              +- SortAggregate(key=[DR_NO#17], functions=[partial_first(Date Rptd#18, false), partial_first(Weapon Used Cd#33, false), partial_first(LAT#43, false), partial_first(LON#44, false), partial_first(AREA#80, false)])
+      :                 +- Sort [DR_NO#17 ASC NULLS FIRST], false, 0
+      :                    +- Union
+      :                       :- Project [DR_NO#17, Date Rptd#18, Weapon Used Cd#33, LAT#43, LON#44, AREA #21 AS AREA#80]
+      :                       :  +- Filter (atleastnnonnulls(6, DR_NO#17, Date Rptd#18, Weapon Used Cd#33, LAT#43, LON#44, AREA #21) AND (NOT (LAT#43 = 0) OR NOT (LON#44 = 0)))
+      :                       :     +- FileScan csv [DR_NO#17,Date Rptd#18,AREA #21,Weapon Used Cd#33,LAT#43,LON#44] Batched: false, DataFilters: [atleastnnonnulls(6, DR_NO#17, Date Rptd#18, Weapon Used Cd#33, LAT#43, LON#44, AREA #21), (NOT (..., Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://okeanos-master:54310/user/user/data/Crime_Data_from_2010_to_201..., PartitionFilters: [], PushedFilters: [Or(Not(EqualTo(LAT,0)),Not(EqualTo(LON,0)))], ReadSchema: struct<DR_NO:string,Date Rptd:string,AREA :string,Weapon Used Cd:string,LAT:string,LON:string>
+      :                       +- Project [DR_NO#104, Date Rptd#105, Weapon Used Cd#120, LAT#130, LON#131, AREA#108]
+      :                          +- Filter (atleastnnonnulls(6, DR_NO#104, Date Rptd#105, Weapon Used Cd#120, LAT#130, LON#131, AREA#108) AND (NOT (LAT#130 = 0) OR NOT (LON#131 = 0)))
+      :                             +- FileScan csv [DR_NO#104,Date Rptd#105,AREA#108,Weapon Used Cd#120,LAT#130,LON#131] Batched: false, DataFilters: [atleastnnonnulls(6, DR_NO#104, Date Rptd#105, Weapon Used Cd#120, LAT#130, LON#131, AREA#108), (..., Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://okeanos-master:54310/user/user/data/Crime_Data_from_2020_to_Pre..., PartitionFilters: [], PushedFilters: [Or(Not(EqualTo(LAT,0)),Not(EqualTo(LON,0)))], ReadSchema: struct<DR_NO:string,Date Rptd:string,AREA:string,Weapon Used Cd:string,LAT:string,LON:string>
+      +- Filter isnotnull(PREC#201)
+         +- FileScan csv [X#196,Y#197,PREC#201] Batched: false, DataFilters: [isnotnull(PREC#201)], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://okeanos-master:54310/user/user/data/LAPD_Police_Stations.csv], PartitionFilters: [], PushedFilters: [IsNotNull(PREC)], ReadSchema: struct<X:string,Y:string,PREC:string>
+
+
++----+-----------+------------------+
+|Year|Crime_Count|  Average_Distance|
++----+-----------+------------------+
+|2010|       8161|2.7836960464904936|
+|2011|       7225| 2.790426953439069|
+|2012|       6521|2.8343652769571306|
+|2013|       5851|2.8302771055173506|
+|2014|       4556|2.7709646176455234|
+|2015|       6729|2.7062554213148218|
+|2016|       8094|2.7176565111395914|
+|2017|       7780|2.7213858838248184|
+|2018|       7414| 2.735588514413619|
+|2019|       7135| 2.740826840685144|
+|2020|       8492| 2.688041562330306|
+|2021|       9746|2.6374392388810888|
+|2022|      10031| 2.610219042372007|
+|2023|       8949|2.5489005336419526|
++----+-----------+------------------+
+
