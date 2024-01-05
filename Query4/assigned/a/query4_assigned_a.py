@@ -47,6 +47,9 @@ firearm_codes = [str(i) for i in range(100, 200)]
 # Clear Null Island rows
 crimes_df = crimes_df.filter((col("LAT") != "0") | (col("LON") != "0"))
 
+# Remove Duplicate Crimes
+crimes_df = crimes_df.dropDuplicates(["DR_NO"])
+
 # Filter rows based on the Weapon Used Cd column and then drop the column
 crimes_df = crimes_df.filter(col("Weapon Used Cd").cast("string").isin(firearm_codes))
 crimes_df = crimes_df.drop("Weapon Used Cd")

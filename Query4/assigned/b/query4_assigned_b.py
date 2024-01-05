@@ -46,6 +46,9 @@ LAPD_stations = spark.read.csv("/user/user/data/LAPD_Police_Stations.csv", heade
 # Clear Null Island rows
 crimes_df = crimes_df.filter((col("LAT") != "0") | (col("LON") != "0"))
 
+# Remove Duplicate Crimes
+crimes_df = crimes_df.dropDuplicates(["DR_NO"])
+
 # Convert "AREA" to int to compare with PREC
 crimes_df = crimes_df.withColumn("AREA", col("AREA").cast("int"))
 

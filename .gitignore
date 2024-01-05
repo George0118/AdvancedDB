@@ -1,5 +1,6 @@
-# Ignore all .csv files
+# Ignore all .csv & png files
 *.csv
+*.png
 
 # Ignore files
 passwords.txt
