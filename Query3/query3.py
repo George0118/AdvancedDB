@@ -78,7 +78,7 @@ first_join = crimes_df1_2015.join(reverse_geocoding_data, ["LAT", "LON"], "inner
 
 # Second Join
 merged_data = first_join.join(combined_incomes, first_join["ZIPcode"] == combined_incomes["Zip Code"], "inner")
-count2 = merged_data.count()
+#count2 = merged_data.count()
 # print("Number of rows in merged_data:", count2)
 # merged_data.show(truncate=False)
 
