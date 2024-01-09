@@ -1,0 +1,72 @@
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Project [LAT#43, LON#44, DR_NO#17, Date Rptd#18, Vict Descent#30, Timestamp#132, Year#139, ZIPcode#168]
+   +- BroadcastHashJoin [LAT#43, LON#44], [LAT#122, LON#123], Inner, BuildRight, false
+      :- Project [DR_NO#17, Date Rptd#18, Vict Descent#30, LAT#43, LON#44, Timestamp#132, year(cast(Timestamp#132 as date)) AS Year#139]
+      :  +- Project [DR_NO#17, Date Rptd#18, Vict Descent#30, LAT#43, LON#44, gettimestamp(Date Rptd#18, MM/dd/yyyy hh:mm:ss a, TimestampType, Some(Europe/Athens), false) AS Timestamp#132]
+      :     +- Filter ((((year(cast(gettimestamp(Date Rptd#18, MM/dd/yyyy hh:mm:ss a, TimestampType, Some(Europe/Athens), false) as date)) = 2015) AND isnotnull(Vict Descent#30)) AND isnotnull(LAT#43)) AND isnotnull(LON#44))
+      :        +- FileScan csv [DR_NO#17,Date Rptd#18,Vict Descent#30,LAT#43,LON#44] Batched: false, DataFilters: [(year(cast(gettimestamp(Date Rptd#18, MM/dd/yyyy hh:mm:ss a, TimestampType, Some(Europe/Athens),..., Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://okeanos-master:54310/user/user/data/Crime_Data_from_2010_to_201..., PartitionFilters: [], PushedFilters: [IsNotNull(Vict Descent), IsNotNull(LAT), IsNotNull(LON)], ReadSchema: struct<DR_NO:string,Date Rptd:string,Vict Descent:string,LAT:string,LON:string>
+      +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, string, true], input[1, string, true]),false), [plan_id=106]
+         +- SortAggregate(key=[LAT#122, LON#123], functions=[first(ZIPcode#124, false)])
+            +- Sort [LAT#122 ASC NULLS FIRST, LON#123 ASC NULLS FIRST], false, 0
+               +- Exchange hashpartitioning(LAT#122, LON#123, 200), ENSURE_REQUIREMENTS, [plan_id=102]
+                  +- SortAggregate(key=[LAT#122, LON#123], functions=[partial_first(ZIPcode#124, false)])
+                     +- Sort [LAT#122 ASC NULLS FIRST, LON#123 ASC NULLS FIRST], false, 0
+                        +- Filter (isnotnull(LAT#122) AND isnotnull(LON#123))
+                           +- FileScan csv [LAT#122,LON#123,ZIPcode#124] Batched: false, DataFilters: [isnotnull(LAT#122), isnotnull(LON#123)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/user/data/revgecoding.csv], PartitionFilters: [], PushedFilters: [IsNotNull(LAT), IsNotNull(LON)], ReadSchema: struct<LAT:string,LON:string,ZIPcode:string>
+
+
++------------------------------+-----+
+|Descent_Code                  |count|
++------------------------------+-----+
+|Hispanic/Latin/Mexican        |1036 |
+|White                         |579  |
+|Black                         |337  |
+|Other                         |262  |
+|Unknown                       |70   |
+|Other Asian                   |44   |
+|Korean                        |3    |
+|Chinese                       |1    |
+|American Indian/Alaskan Native|1    |
++------------------------------+-----+
+
+Second Join - Execution Plan:
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- BroadcastHashJoin [ZIPcode#234], [Zip Code#96], Inner, BuildRight, false
+   :- Project [LAT#43, LON#44, DR_NO#17, Date Rptd#18, Vict Descent#30, Timestamp#132, Year#139, ZIPcode#234]
+   :  +- BroadcastHashJoin [LAT#43, LON#44], [LAT#122, LON#123], Inner, BuildRight, false
+   :     :- Project [DR_NO#17, Date Rptd#18, Vict Descent#30, LAT#43, LON#44, Timestamp#132, year(cast(Timestamp#132 as date)) AS Year#139]
+   :     :  +- Project [DR_NO#17, Date Rptd#18, Vict Descent#30, LAT#43, LON#44, gettimestamp(Date Rptd#18, MM/dd/yyyy hh:mm:ss a, TimestampType, Some(Europe/Athens), false) AS Timestamp#132]
+   :     :     +- Filter ((((year(cast(gettimestamp(Date Rptd#18, MM/dd/yyyy hh:mm:ss a, TimestampType, Some(Europe/Athens), false) as date)) = 2015) AND isnotnull(Vict Descent#30)) AND isnotnull(LAT#43)) AND isnotnull(LON#44))
+   :     :        +- FileScan csv [DR_NO#17,Date Rptd#18,Vict Descent#30,LAT#43,LON#44] Batched: false, DataFilters: [(year(cast(gettimestamp(Date Rptd#18, MM/dd/yyyy hh:mm:ss a, TimestampType, Some(Europe/Athens),..., Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://okeanos-master:54310/user/user/data/Crime_Data_from_2010_to_201..., PartitionFilters: [], PushedFilters: [IsNotNull(Vict Descent), IsNotNull(LAT), IsNotNull(LON)], ReadSchema: struct<DR_NO:string,Date Rptd:string,Vict Descent:string,LAT:string,LON:string>
+   :     +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, string, true], input[1, string, true]),false), [plan_id=997]
+   :        +- Filter isnotnull(ZIPcode#234)
+   :           +- SortAggregate(key=[LAT#122, LON#123], functions=[first(ZIPcode#124, false)])
+   :              +- Sort [LAT#122 ASC NULLS FIRST, LON#123 ASC NULLS FIRST], false, 0
+   :                 +- Exchange hashpartitioning(LAT#122, LON#123, 200), ENSURE_REQUIREMENTS, [plan_id=992]
+   :                    +- SortAggregate(key=[LAT#122, LON#123], functions=[partial_first(ZIPcode#124, false)])
+   :                       +- Sort [LAT#122 ASC NULLS FIRST, LON#123 ASC NULLS FIRST], false, 0
+   :                          +- Filter (isnotnull(LAT#122) AND isnotnull(LON#123))
+   :                             +- FileScan csv [LAT#122,LON#123,ZIPcode#124] Batched: false, DataFilters: [isnotnull(LAT#122), isnotnull(LON#123)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/user/data/revgecoding.csv], PartitionFilters: [], PushedFilters: [IsNotNull(LAT), IsNotNull(LON)], ReadSchema: struct<LAT:string,LON:string,ZIPcode:string>
+   +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, string, true]),false), [plan_id=1014]
+      +- HashAggregate(keys=[Zip Code#96, income#147], functions=[])
+         +- Exchange hashpartitioning(Zip Code#96, income#147, 200), ENSURE_REQUIREMENTS, [plan_id=1011]
+            +- HashAggregate(keys=[Zip Code#96, income#147], functions=[])
+               +- Union
+                  :- Filter isnotnull(Zip Code#96)
+                  :  +- TakeOrderedAndProject(limit=3, orderBy=[income#147 DESC NULLS LAST], output=[Zip Code#96,income#147])
+                  :     +- HashAggregate(keys=[Zip Code#96, income#147], functions=[])
+                  :        +- Exchange hashpartitioning(Zip Code#96, income#147, 200), ENSURE_REQUIREMENTS, [plan_id=1000]
+                  :           +- HashAggregate(keys=[Zip Code#96, income#147], functions=[])
+                  :              +- Project [Zip Code#96, cast(regexp_replace(Estimated Median Income#98, [$,], , 1) as int) AS income#147]
+                  :                 +- FileScan csv [Zip Code#96,Estimated Median Income#98] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/user/data/income/LA_income_2015.csv], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<Zip Code:string,Estimated Median Income:string>
+                  +- Filter isnotnull(Zip Code#153)
+                     +- TakeOrderedAndProject(limit=3, orderBy=[income#150 ASC NULLS FIRST], output=[Zip Code#153,income#150])
+                        +- HashAggregate(keys=[Zip Code#153, income#150], functions=[])
+                           +- Exchange hashpartitioning(Zip Code#153, income#150, 200), ENSURE_REQUIREMENTS, [plan_id=1004]
+                              +- HashAggregate(keys=[Zip Code#153, income#150], functions=[])
+                                 +- Project [Zip Code#153, cast(regexp_replace(Estimated Median Income#155, [$,], , 1) as int) AS income#150]
+                                    +- FileScan csv [Zip Code#153,Estimated Median Income#155] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/user/data/income/LA_income_2015.csv], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<Zip Code:string,Estimated Median Income:string>
+
+
