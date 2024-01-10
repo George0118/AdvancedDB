@@ -63,7 +63,7 @@ top_incomes = spark.sql(top_income_sql)
 bottom_incomes = spark.sql(bottom_income_sql)
 
 # Union the top and bottom DataFrames with distinct rows
-combined_incomes = top_incomes.union(bottom_incomes).distinct()
+combined_incomes = top_incomes.union(bottom_incomes)
 
 # Show the combined DataFrame
 # combined_incomes.show(truncate=False)
